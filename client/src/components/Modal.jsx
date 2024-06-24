@@ -1,0 +1,142 @@
+import React from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
+  const [formData, setFormData] = useState({
+    nameOfPerson: "",
+    nameOfPDF: "",
+    pdfFile: null,
+  });
+
+  useEffect(() => {
+    if (existingData) {
+      setFormData({
+        nameOfPerson: existingData.nameOfPerson,
+        nameOfPDF: existingData.nameOfPDF,
+        pdfFile: null,
+      });
+    } else {
+      setFormData({
+        nameOfPerson: "",
+        nameOfPDF: "",
+        pdfFile: null,
+      });
+    }
+  }, [existingData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, pdfFile: e.target.files[0] });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append(
+      "nameOfPerson",
+      formData.nameOfPerson || existingData.nameOfPerson
+    );
+    data.append("nameOfPDF", formData.nameOfPDF || existingData.nameOfPDF);
+    if (formData.pdfFile) {
+      data.append("pdfFile", formData.pdfFile);
+    }
+
+    try {
+      if (existingData) {
+        const response = await axios.put(
+          `http://localhost:5000/api/pdfs/${existingData._id}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        onSubmit(response.data, existingData._id);
+      } else {
+        const response = await axios.post(
+          "http://localhost:5000/api/pdfs",
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        onSubmit(response.data);
+      }
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+    }
+  };
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-8 rounded">
+        <h2 className="text-xl mb-4">
+          {existingData ? "Edit PDF" : "Add PDF"}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-2">
+            <label className="block mb-1">Name of Person</label>
+            <input
+              type="text"
+              name="nameOfPerson"
+              className="w-full px-2 py-1 border"
+              value={formData.nameOfPerson}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">Name of PDF</label>
+            <input
+              type="text"
+              name="nameOfPDF"
+              className="w-full px-2 py-1 border"
+              value={formData.nameOfPDF}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">Upload PDF</label>
+            <input
+              type="file"
+              name="pdfFile"
+              className="w-full px-2 py-1 border"
+              accept="application/pdf"
+              onChange={handleFileChange}
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-300 text-gray-800 px-4 py-1 rounded mr-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700"
+            >
+              {existingData ? "Update" : "Add"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Modal;
