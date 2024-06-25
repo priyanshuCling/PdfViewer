@@ -18,7 +18,7 @@ const Pdfs = () => {
     const fetchPdfs = async () => {
       try {
         const response = await axios.get(
-          "https://pdf-viewer-backend-ten.vercel.app/api/pdfs"
+          "https://pdf-viewer-backend-neon.vercel.app/api/pdfs"
         );
         setPdfs(response.data);
       } catch (error) {
@@ -59,7 +59,7 @@ const Pdfs = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `https://pdf-viewer-backend-ten.vercel.app/api/pdfs/${id}`
+        `https://pdf-viewer-backend-neon.vercel.app/api/pdfs/${id}`
       );
       setPdfs(pdfs.filter((pdf) => pdf._id !== id));
       setSuccess("PDF deleted successfully!");

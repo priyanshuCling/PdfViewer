@@ -11,7 +11,7 @@ const ViewPdf = () => {
     const fetchPdfPaths = async () => {
       try {
         const response = await axios.get(
-          `https://pdf-viewer-backend-ten.vercel.app/api/pdfs/${id}`
+          `https://pdf-viewer-backend-neon.vercel.app/api/pdfs/${id}`
         );
         setOldPdfPath(response.data.oldPdfPath);
         setNewPdfPath(response.data.newPdfPath);
@@ -32,7 +32,7 @@ const ViewPdf = () => {
             <h2 className="text-lg font-bold ">Existing PDF</h2>
             {oldPdfPath ? (
               <embed
-                src={`https://pdf-viewer-backend-ten.vercel.app/${oldPdfPath}`}
+                src={`https://pdf-viewer-backend-neon.vercel.app/${oldPdfPath}`}
                 width="100%"
                 height="750"
                 type="application/pdf"
@@ -45,7 +45,7 @@ const ViewPdf = () => {
             <h2 className="text-lg font-bold">New PDF</h2>
             {newPdfPath ? (
               <embed
-                src={`https://pdf-viewer-backend-ten.vercel.app/${newPdfPath}`}
+                src={`https://pdf-viewer-backend-neon.vercel.app/${newPdfPath}`}
                 width="100%"
                 height="750"
                 type="application/pdf"
