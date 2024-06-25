@@ -24,9 +24,8 @@ const ViewPdf = () => {
   }, [id]);
 
   return (
-    <div className="flex w-full mt-20 lg:mt-10">
-      <div className="w-[18%]"></div>
-      <div className="flex justify-center items-center h-screen w-[80%]">
+    <div className="flex w-full  ">
+      <div className="flex justify-center items-center h-screen w-full">
         <div className="w-full lg:flex lg:flex-row flex-col justify-between h-screen">
           <div className="lg:w-1/2 w-full border p-4">
             <h2 className="text-lg font-bold ">Existing PDF</h2>
@@ -34,7 +33,7 @@ const ViewPdf = () => {
               <embed
                 src={`https://pdfviewer-glf1.onrender.com/${oldPdfPath}`}
                 width="100%"
-                height="750"
+                height="800"
                 type="application/pdf"
               />
             ) : (
@@ -47,7 +46,7 @@ const ViewPdf = () => {
               <embed
                 src={`https://pdfviewer-glf1.onrender.com/${newPdfPath}`}
                 width="100%"
-                height="750"
+                height="800"
                 type="application/pdf"
               />
             ) : (

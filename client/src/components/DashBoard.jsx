@@ -3,7 +3,7 @@ import React from "react";
 
 const Dashboard = () => {
   return (
-    <div className="flex w-full">
+    <div className="flex w-full ml-4 ">
       <div className="w-[15%] "></div>
       <div className=" w-full text-center mx-auto pt-20 ">
         <h1 className="text-2xl text-center mt-5 font-semibold">
