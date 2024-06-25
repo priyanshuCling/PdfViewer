@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
     try {
       if (existingData) {
         const response = await axios.put(
-          `https://pdf-viewer-backend-neon.vercel.app/api/pdfs/${existingData._id}`,
+          `http://localhost:5000/api/pdfs/${existingData._id}`,
           data,
           {
             headers: {
@@ -77,7 +77,7 @@ const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
         onSubmit(response.data, existingData._id);
       } else {
         const response = await axios.post(
-          "https://pdf-viewer-backend-neon.vercel.app/api/pdfs",
+          "http://localhost:5000/api/pdfs",
           data,
           {
             headers: {
