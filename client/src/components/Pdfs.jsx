@@ -17,7 +17,9 @@ const Pdfs = () => {
   useEffect(() => {
     const fetchPdfs = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/pdfs");
+        const response = await axios.get(
+          "https://pdf-viewer-backend-ten.vercel.app/api/pdfs"
+        );
         setPdfs(response.data);
       } catch (error) {
         console.error("Error fetching PDFs:", error);
@@ -56,7 +58,9 @@ const Pdfs = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/pdfs/${id}`);
+      await axios.delete(
+        `https://pdf-viewer-backend-ten.vercel.app/api/pdfs/${id}`
+      );
       setPdfs(pdfs.filter((pdf) => pdf._id !== id));
       setSuccess("PDF deleted successfully!");
     } catch (error) {

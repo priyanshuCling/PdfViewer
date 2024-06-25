@@ -10,10 +10,9 @@ const Sidebar = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 786) {
-        // Adjust 768px as per your medium breakpoint
-        setIsOpen(true); // Open sidebar if screen width is greater than medium breakpoint
+        setIsOpen(true);
       } else {
-        setIsOpen(false); // Close sidebar if screen width is less than or equal to medium breakpoint
+        setIsOpen(false);
       }
     };
 
