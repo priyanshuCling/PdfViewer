@@ -11,7 +11,7 @@ const ViewPdf = () => {
     const fetchPdfPaths = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/pdfs/${id}`
+          `https://pdfviewer-glf1.onrender.com/api/pdfs/${id}`
         );
         setOldPdfPath(response.data.oldPdfPath);
         setNewPdfPath(response.data.newPdfPath);
@@ -32,7 +32,7 @@ const ViewPdf = () => {
             <h2 className="text-lg font-bold ">Existing PDF</h2>
             {oldPdfPath ? (
               <embed
-                src={`http://localhost:5000/${oldPdfPath}`}
+                src={`https://pdfviewer-glf1.onrender.com/${oldPdfPath}`}
                 width="100%"
                 height="750"
                 type="application/pdf"
@@ -45,7 +45,7 @@ const ViewPdf = () => {
             <h2 className="text-lg font-bold">New PDF</h2>
             {newPdfPath ? (
               <embed
-                src={`http://localhost:5000/${newPdfPath}`}
+                src={`https://pdfviewer-glf1.onrender.com/${newPdfPath}`}
                 width="100%"
                 height="750"
                 type="application/pdf"
