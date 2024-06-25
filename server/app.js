@@ -31,8 +31,10 @@ mongoose
 // PDF Schema
 const pdfSchema = new mongoose.Schema({
   nameOfPerson: String,
-  nameOfPDF: String,
-  pdfPath: String,
+  nameOfOldPdf: String,
+  nameOfNewPdf: String,
+  oldPdfPath: String,
+  newPdfPath: String,
 });
 const Pdf = mongoose.model("Pdf", pdfSchema);
 
@@ -51,23 +53,28 @@ const upload = multer({ storage: storage });
 // API calls
 
 // Create PDF Entry
-app.post("/api/pdfs", upload.single("pdfFile"), async (req, res) => {
-  const newPdf = new Pdf({
-    nameOfPerson: req.body.nameOfPerson,
-    nameOfPDF: req.body.nameOfPDF,
-    pdfPath: req.file.path,
-  });
+app.post(
+  "/api/pdfs",
+  upload.fields([{ name: "oldPdfFile" }, { name: "newPdfFile" }]),
+  async (req, res) => {
+    const newPdf = new Pdf({
+      nameOfPerson: req.body.nameOfPerson,
+      nameOfOldPdf: req.body.nameOfOldPdf,
+      nameOfNewPdf: req.body.nameOfNewPdf,
+      oldPdfPath: req.files.oldPdfFile ? req.files.oldPdfFile[0].path : "",
+      newPdfPath: req.files.newPdfFile ? req.files.newPdfFile[0].path : "",
+    });
 
-  try {
-    const savedPdf = await newPdf.save();
-    res.status(200).send(savedPdf);
-  } catch (err) {
-    res.status(500).send(err);
+    try {
+      const savedPdf = await newPdf.save();
+      res.status(200).send(savedPdf);
+    } catch (err) {
+      res.status(500).send(err);
+    }
   }
-});
+);
 
-// fetch all pdfs
-
+// Fetch all PDFs
 app.get("/api/pdfs", async (req, res) => {
   try {
     const pdfs = await Pdf.find();
@@ -77,7 +84,7 @@ app.get("/api/pdfs", async (req, res) => {
   }
 });
 
-// delete pdfs
+// Delete a PDF
 app.delete("/api/pdfs/:id", async (req, res) => {
   try {
     const deletedPdf = await Pdf.findByIdAndDelete(req.params.id);
@@ -90,29 +97,39 @@ app.delete("/api/pdfs/:id", async (req, res) => {
   }
 });
 
-app.put("/api/pdfs/:id", upload.single("pdfFile"), async (req, res) => {
-  const { nameOfPerson, nameOfPDF } = req.body;
-  const { id } = req.params;
-  const updateData = { nameOfPerson, nameOfPDF };
+// Update a PDF
+app.put(
+  "/api/pdfs/:id",
+  upload.fields([{ name: "oldPdfFile" }, { name: "newPdfFile" }]),
+  async (req, res) => {
+    const { nameOfPerson, nameOfOldPdf, nameOfNewPdf } = req.body;
+    const { id } = req.params;
+    const updateData = { nameOfPerson, nameOfOldPdf, nameOfNewPdf };
 
-  if (req.file) {
-    updateData.pdfPath = req.file.path;
-  }
-
-  try {
-    const updatedPdf = await Pdf.findByIdAndUpdate(id, updateData, {
-      new: true,
-    });
-    if (!updatedPdf) {
-      return res.status(404).json({ message: "PDF not found" });
+    if (req.files.oldPdfFile) {
+      updateData.oldPdfPath = req.files.oldPdfFile[0].path;
     }
-    res.json(updatedPdf);
-  } catch (error) {
-    console.error("Error updating PDF:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
+    if (req.files.newPdfFile) {
+      updateData.newPdfPath = req.files.newPdfFile[0].path;
+    }
+
+    try {
+      const updatedPdf = await Pdf.findByIdAndUpdate(id, updateData, {
+        new: true,
+      });
+      if (!updatedPdf) {
+        return res.status(404).json({ message: "PDF not found" });
+      }
+      res.json(updatedPdf);
+    } catch (error) {
+      console.error("Error updating PDF:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
+// Fetch a specific PDF by ID
 app.get("/api/pdfs/:id", async (req, res) => {
   try {
     const pdf = await Pdf.findById(req.params.id);

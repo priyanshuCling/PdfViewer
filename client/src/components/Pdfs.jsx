@@ -65,8 +65,8 @@ const Pdfs = () => {
     }
   };
 
-  const handleView = (pdfUrl) => {
-    navigate(`/view/${pdfUrl}`);
+  const handleView = (id) => {
+    navigate(`/view/${id}`);
   };
 
   return (
@@ -88,28 +88,25 @@ const Pdfs = () => {
           <table className="min-w-full bg-white border hidden lg:table">
             <thead className="bg-gray-800 text-white">
               <tr>
-                <th className="w-1/3 py-2 px-4">Name of Person</th>
-                <th className="w-1/3 py-2 px-4">Name of PDF</th>
-                <th className="w-1/3 py-2 px-4">Actions</th>
+                <th className="w-1/4 py-2 px-4">Name of Person</th>
+                <th className="w-1/4 py-2 px-4">Old PDF</th>
+                <th className="w-1/4 py-2 px-4">New PDF</th>
+                <th className="w-1/4 py-2 px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
               {pdfs.map((pdf, index) => (
                 <tr key={index} className="text-gray-700">
                   <td className="border py-2 px-4">{pdf.nameOfPerson}</td>
-                  <td className="border py-2 px-4">{pdf.nameOfPDF}.pdf</td>
+                  <td className="border py-2 px-4">{pdf.nameOfOldPdf}.pdf</td>
+                  <td className="border py-2 px-4">{pdf.nameOfNewPdf}.pdf</td>
                   <td className="border py-2 px-4">
                     <div className="flex justify-around">
                       <button
                         className="text-blue-500 hover:text-blue-700 text-3xl"
                         onClick={() => handleView(pdf._id)}
                       >
-                        <Link
-                          to={`/view/${pdf._id}`}
-                          className="text-blue-500 hover:text-blue-700"
-                        >
-                          <GrFormView />
-                        </Link>
+                        <GrFormView />
                       </button>
                       <button
                         className="text-green-500 hover:text-green-700 text-xl"
@@ -137,20 +134,19 @@ const Pdfs = () => {
                   {pdf.nameOfPerson}
                 </div>
                 <div className="mb-2">
-                  <strong>Name of PDF: </strong>
-                  {pdf.nameOfPDF}.pdf
+                  <strong>Name of Old PDF: </strong>
+                  {pdf.nameOfOldPdf}.pdf
+                </div>
+                <div className="mb-2">
+                  <strong>Name of New PDF: </strong>
+                  {pdf.nameOfNewPdf}.pdf
                 </div>
                 <div className="flex justify-around">
                   <button
                     className="text-blue-500 hover:text-blue-700 text-3xl"
                     onClick={() => handleView(pdf._id)}
                   >
-                    <Link
-                      to={`/view/${pdf._id}`}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      <GrFormView />
-                    </Link>
+                    <GrFormView />
                   </button>
                   <button
                     className="text-green-500 hover:text-green-700 text-xl"

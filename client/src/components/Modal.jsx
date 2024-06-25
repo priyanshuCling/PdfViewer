@@ -5,22 +5,28 @@ import { useState, useEffect } from "react";
 const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
   const [formData, setFormData] = useState({
     nameOfPerson: "",
-    nameOfPDF: "",
-    pdfFile: null,
+    nameOfOldPdf: "",
+    nameOfNewPdf: "",
+    oldPdfFile: null,
+    newPdfFile: null,
   });
 
   useEffect(() => {
     if (existingData) {
       setFormData({
         nameOfPerson: existingData.nameOfPerson,
-        nameOfPDF: existingData.nameOfPDF,
-        pdfFile: null,
+        nameOfOldPdf: existingData.nameOfOldPdf,
+        nameOfNewPdf: existingData.nameOfNewPdf,
+        oldPdfFile: null,
+        newPdfFile: null,
       });
     } else {
       setFormData({
         nameOfPerson: "",
-        nameOfPDF: "",
-        pdfFile: null,
+        nameOfOldPdf: "",
+        nameOfNewPdf: "",
+        oldPdfFile: null,
+        newPdfFile: null,
       });
     }
   }, [existingData]);
@@ -31,7 +37,8 @@ const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
   };
 
   const handleFileChange = (e) => {
-    setFormData({ ...formData, pdfFile: e.target.files[0] });
+    const { name, files } = e.target;
+    setFormData({ ...formData, [name]: files[0] });
   };
 
   const handleSubmit = async (e) => {
@@ -41,9 +48,19 @@ const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
       "nameOfPerson",
       formData.nameOfPerson || existingData.nameOfPerson
     );
-    data.append("nameOfPDF", formData.nameOfPDF || existingData.nameOfPDF);
-    if (formData.pdfFile) {
-      data.append("pdfFile", formData.pdfFile);
+    data.append(
+      "nameOfOldPdf",
+      formData.nameOfOldPdf || existingData.nameOfOldPdf
+    );
+    data.append(
+      "nameOfNewPdf",
+      formData.nameOfNewPdf || existingData.nameOfNewPdf
+    );
+    if (formData.oldPdfFile) {
+      data.append("oldPdfFile", formData.oldPdfFile);
+    }
+    if (formData.newPdfFile) {
+      data.append("newPdfFile", formData.newPdfFile);
     }
 
     try {
@@ -98,21 +115,42 @@ const Modal = ({ isOpen, onClose, onSubmit, existingData }) => {
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1">Name of PDF</label>
+            <label className="block mb-1">Name of Old PDF</label>
             <input
               type="text"
-              name="nameOfPDF"
+              name="nameOfOldPdf"
               className="w-full px-2 py-1 border"
-              value={formData.nameOfPDF}
+              value={formData.nameOfOldPdf}
               onChange={handleChange}
               required
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1">Upload PDF</label>
+            <label className="block mb-1">Name of New PDF</label>
+            <input
+              type="text"
+              name="nameOfNewPdf"
+              className="w-full px-2 py-1 border"
+              value={formData.nameOfNewPdf}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">Upload Old PDF</label>
             <input
               type="file"
-              name="pdfFile"
+              name="oldPdfFile"
+              className="w-full px-2 py-1 border"
+              accept="application/pdf"
+              onChange={handleFileChange}
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">Upload New PDF</label>
+            <input
+              type="file"
+              name="newPdfFile"
               className="w-full px-2 py-1 border"
               accept="application/pdf"
               onChange={handleFileChange}
